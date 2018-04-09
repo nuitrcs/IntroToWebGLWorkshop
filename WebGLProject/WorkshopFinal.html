@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body style="margin: 0;">
+        <script src="three/three.js"></script>
+        <script src="three/OrbitControls.js"></script>
+        <script src="three/ColladaLoader.js"></script>
+        <script>
+            
+            // Declare some globals fo the 3D scene to be visualized
+            var scene,
+                cam,
+                renderer,
+                controls;
+    
+            main();
+
+            function main(){
+                initializeScene();
+                updateLoop();
+            }
+
+            // Initializes everything that will be rendered
+            function initializeScene(){
+                // Initialize scene
+                scene = new THREE.Scene();
+                // Initialize camera
+                cam = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+                cam.position.set(3, 2, 3);
+                // Initialize renderer
+                renderer = new THREE.WebGLRenderer({antialias: true});
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setPixelRatio(window.devicePixelRatio);
+                renderer.setClearColor(0x525252, 1);
+                // Initialize controls
+                controls = new THREE.OrbitControls(cam, renderer.domElement);
+                controls.enableDamping = true;
+                controls.target.set(0.0, 1.16, 0.0);
+                controls.addEventListener('change', renderScene);
+
+                // Create two lights, poisiton them add them to the scene
+                var ambLight = new THREE.AmbientLight(0xB8B8B8);
+                scene.add(ambLight);
+                var keyLight = new THREE.PointLight(0xFFFFFF, 1, 50, 1);
+                keyLight.position.set(0,5,3);
+                scene.add(keyLight);
+
+                // create an axis at the center of the world
+                var jack = new THREE.AxesHelper(3);
+                scene.add(jack);
+
+                loadMesh();
+
+                // add scene and all its elements to the page
+                document.body.appendChild(renderer.domElement);
+            }
+
+            // Update function so the scene redraws when interacted with
+            function updateLoop(){
+                requestAnimationFrame(updateLoop);
+                controls.update();
+            }
+
+            // render the scene with the defined camera
+            function renderScene(){
+                renderer.render(scene, cam);
+            }
+
+            // Load a model contained in a collada file, set it up and add it to the scene
+            function loadMesh(){
+
+                var loader = new THREE.ColladaLoader();
+
+                // Create and setup a material for the model
+                var hurricaneMaterial = new THREE.MeshLambertMaterial();
+                hurricaneMaterial.vertexColors = 1;
+
+                // load the model and add it to the scene
+                loader.load('Data/Katrina.dae', function(collada) {
+                                                collada.scene.children[0].material = hurricaneMaterial;
+                                                scene.add(collada.scene.children[0]);
+                                                renderScene();
+                                            }
+                                        );
+            }
+            
+        </script>
+    </body>
+</html>
