@@ -9,9 +9,9 @@
  * **********************************************************************************/
 
 // These first three lines are HTML, not JavaScript and should be pasted inside the
-// <body> tag before the <script> tag. These lines source the required three.js libraries
-// that will allow creation of a Collada file loader, a simple control set, and the core
-// threejs library that will allow access to WebGL. These files are located in the three
+// <body> tag before the <script> tag in index.html. These lines source the required three.js
+// libraries that will allow creation of a Collada file loader, a simple control set, and the
+// core threejs library that will allow access to WebGL. These files are located in the three
 // sub directory of this project.
 
     <script src="three/three.js"></script>
@@ -19,16 +19,16 @@
     <script src="three/ColladaLoader.js"></script>
 
 // The rest of the source code in this document will be placed inside the <script> tags
-// in index.html. Global variables must be declared first. These globals declare the
-// scene into which all objects required for rendering will be placed, a camera, a
-// renderer and a control set.
+// in index.html.
+// Global variables must be declared first. These globals declare the scene into which all
+// objects required for rendering will be placed, a camera, a renderer and a control set.
 
     var scene,
     cam,
     renderer,
     controls;
 
-// The script needs an entry point, a function that is called directly. The script
+// The script needs an entry point; a function that is called directly. The script
 // begins by calling main() which is defined after it is called.
 
     main();
@@ -52,20 +52,20 @@
         //subsequent sections pasted here
     }
 
-// 1) Initialize the scene variable with a scene object.
+// 1) Initialize the scene variable with a three.js scene object.
 
     scene = new THREE.Scene();
 
 // 2) Initialize the camera variable and set its position.
-// The arguments supplied to the camera constructor are the field of view, aspect
-// ratio, near clip plane, and far clip plane. Any surfaces that fall outside of the
-// near and far clip planes will be discarded immediately.
+// The arguments supplied to the three.js camera constructor are the field of view,
+// aspect ratio, near clip plane, and far clip plane. Any surfaces that fall outside
+// of the near and far clip planes will be discarded immediately.
 // The position arguments are X, Y and Z.
 
     cam = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
     cam.position.set(3, 2, 3);
 
-// 3) Initialize the renderer and enable antialiasing
+// 3) Initialize the renderer with a three.js WebGLRenderer object, and enable antialiasing.
 // Set the renderer size the same as the interior of the browser window.
 // Set the pixel ratio. Different devices and displays have different pixel ratios. This
 // line determines the pixel ratio for the current display device. An incorrect pixel
@@ -74,21 +74,21 @@
 // It is an RGB+Alpha value expressed here as a hex value for RGB and a float for Alpha.
 // 0x525252 produces a middle grey color. An alpha value of 1 is opaque. Setting alpha to
 // less that 1 will create a transparent background exposing the HTML document behind the
-// renderer. 
+// renderer.
 
     renderer = new THREE.WebGLRenderer({antialias: true});
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setClearColor(0x525252, 1);
 
-// 4) Initialize the controls, attach the controls to camera and add controls to the
-// renderer DOM element.
+// 4) Initialize the controls with a three.js OrbitCOntrols object, attach the controls to
+// camera and add controls to the renderer DOM element.
 // Enable damping adds weight and drag to the controls that makes the object being
 // manipulated feel a bit more physical and tactile.
 // Target is the origin around which the controls will orbit. Because the controls are
 // attached to the camera on creation, the specified position also serves as a target for
 // the camera. The position X=0, Y=1.16, Z=0 is not arbitrary. It is approximately the
-// center of the hurricane object the will be placed in the scene.
+// center of the hurricane object that will be placed in the scene.
 // An event listener called change is added. When triggered, it will call a renderScene()
 // function to be defined later in the script.
 
@@ -97,23 +97,23 @@
     controls.target.set(0.0, 1.16, 0.0);
     controls.addEventListener('change', renderScene);
 
-// 5) Create two lights and add them to the scene.
+// 5) Create two three.js lights and add them to the scene.
 // Only one light is required to illuminate a scene, however, to avoid casting a dark
-// shadow over one side of the model, an ambient light is also created.
-// Ambient lights have no origin or direction and will light an object uniformly from any
-// angle. The ambient light color is a middle gray expressed in hexadecimal.
-// A point light casts light in all directions from a specific position and can create
-// sharp highlights given a material with strong reflectance. The ambient light's
-// arguments are color (pure white here), intensity, distance and decay. With these
-// settings, the point light will fall off to 0 over 50 world units, linearly.
+// shadow over one side of the model, an Ambient Light is created in addition to a
+// Point Light. Ambient lights have no origin or direction and will light an object
+// uniformly from any angle. The ambient light color is a middle gray expressed in
+// hexadecimal. A point light casts light in all directions from a specific position and
+// can create sharp highlights given a material with strong reflectance. The ambient
+// light's arguments are color (pure white here), intensity, distance and decay. With
+// these settings, the point light will fall off to 0 over 50 world units, linearly.
 
-    var ambLight = new THREE.AmbientLight(0xB8B8B8);
+    var ambLight = new THREE.AmbientLight(0xCFCFCF);
     scene.add(ambLight);
     var keyLight = new THREE.PointLight(0xFFFFFF, 1, 50, 1);
     keyLight.position.set(0,5,3);
     scene.add(keyLight);
 
-// 6) Create an axis at the center of the world.
+// 6) Create a three.js AxesHelper at the center of the world.
 // This axis, commonly called a jack, is a marker placed at the center of the world with
 // color coded lines delineating the X, Y and Z axes of the space.
 // This object is unnecessary and only added for the purposes of illustrating the
@@ -128,7 +128,7 @@
 
 // In the main() function definition a function called updateLoop() was called. updateLoop()
 // needs to be defined as well.
-// updateLoop() first calls requestAnimationFrame() with itself as a callback.
+// updateLoop() first calls requestAnimationFrame() with itself as a callback function.
 // requestAnimationFrame() is a browser function to sequence animation. This loop
 // repeatedly requests animation frames and updates the input from controls. This
 // is required for the drag effect on the controls to allow the camera to slow to a stop
@@ -139,9 +139,9 @@
         controls.update();
     }
 
-// When controls were initialized, a callback function called renderScene() was specified
-// for the eventListener. Anytime a change is detected in input, renderScene() will be
-// called. renderScene() should be defined next.
+// When the controls were initialized, a callback function called renderScene() was
+// specified for the Event Listener. Anytime a change is detected in input, renderScene()
+// will be called. renderScene() should be defined next.
 // renderScene() simply calls the render function from the renderer object and specifies the
 // scene object to be rendered using the camera as it's projection.
 
@@ -167,7 +167,7 @@
     }
 
 // 1) Declare a loader object to load the data. Because the data is stored in a Collada
-// file the ColladaLoader is used.
+// file the three.js ColladaLoader is used.
 
     var loader = new THREE.ColladaLoader();
 
@@ -176,7 +176,7 @@
 // Lambert material supplied by three.js is sufficient.
 // The new material is named hurricaneMaterial and vertexColors on the material are set to
 // 1. This enables the material to show color data that is applied to the vertices of the
-// model. The Katrina.dae model has wind magnitude data encoded 
+// model. The Katrina.dae model has wind magnitude data encoded on it's vertices.
 
     var hurricaneMaterial = new THREE.MeshLambertMaterial();
     hurricaneMaterial.vertexColors = 1;
@@ -184,20 +184,20 @@
 // 3) Load the Katrina.dae file.
 // From the loader object the load() function is called. The Katrina.dae file in Data is
 // specified as the object to be loaded. The second argument to load() is an inline function.
-// This function produces an object named collada that holds the contents of the Katrina.dae
-// Collada file. The collada object holds an array of the objects the Collada file
-// contains. These objects may be lights, cameras, animations, entire scenes, not just meshes.
-// In this example the only object in the Katrina.dae Collada file is the hurricane mesh
+// This function produces an object named hurricaneModel that holds the contents of the Katrina.dae
+// Collada file. The hurricaneModel object holds an array of the objects the Collada file
+// contains. These objects may be lights, cameras, animations, entire scenes, not just models or
+// meshes. In this example the only object in the Katrina.dae Collada file is the hurricane mesh
 // object. The mesh object can be accessed by getting the first child [0] of the array
-// contained in the collada object because it is the only object in the file.
+// contained in the hurricaneModel object because it is the only object in the file.
 // The material on child[0] is set to the hurricaneMaterial created earlier.
 // child[0] is added to the scene and then the scene is rendered.
 // If the render function is not called immediately the mesh will not appear until a
 // user supplies input.
 
-    loader.load('Data/Katrina.dae', function(collada) {
-                            collada.scene.children[0].material = hurricaneMaterial;
-                            scene.add(collada.scene.children[0]);
+    loader.load('Data/Katrina.dae', function(hurricaneModel) {
+                            hurricaneModel.scene.children[0].material = hurricaneMaterial;
+                            scene.add(hurricaneModel.scene.children[0]);
                             renderScene();
                         }
     );

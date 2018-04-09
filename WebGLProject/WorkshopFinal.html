@@ -41,7 +41,7 @@
                 controls.addEventListener('change', renderScene);
 
                 // Create two lights, poisiton them add them to the scene
-                var ambLight = new THREE.AmbientLight(0xB8B8B8);
+                var ambLight = new THREE.AmbientLight(0xCFCFCF);
                 scene.add(ambLight);
                 var keyLight = new THREE.PointLight(0xFFFFFF, 1, 50, 1);
                 keyLight.position.set(0,5,3);
@@ -78,9 +78,9 @@
                 hurricaneMaterial.vertexColors = 1;
 
                 // load the model and add it to the scene
-                loader.load('Data/Katrina.dae', function(collada) {
-                                                collada.scene.children[0].material = hurricaneMaterial;
-                                                scene.add(collada.scene.children[0]);
+                loader.load('Data/Katrina.dae', function(hurricaneModel) {
+                                                hurricaneModel.scene.children[0].material = hurricaneMaterial;
+                                                scene.add(hurricaneModel.scene.children[0]);
                                                 renderScene();
                                             }
                                         );
